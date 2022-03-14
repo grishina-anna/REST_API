@@ -1,15 +1,18 @@
 package tests;
 
-import org.junit.jupiter.api.Test;
 import io.restassured.response.ValidatableResponse;
+import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 
 public class DemowebshopTest {
     @Test
     void addToCartTest(){
-        String response =
+        Integer cartSize = 0;
+
+        ValidatableResponse response =
        given()
                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
                .cookie("Nop.customer=359c8211-0cf7-496c-b8a7-7256023dedec; " +
@@ -24,10 +27,12 @@ public class DemowebshopTest {
                .when()
                .post("http://demowebshop.tricentis.com/addproducttocart/details/74/1")
                .then()
+               .log().all()
                .statusCode(200)
                .body("success", is(true))
-               .body("messadge", is("The product has been added to your \u003ca href=\"/cart\"\u003eshopping cart\u003c/a\u003e")
-               .extract().response().asString();
-        System.out.println(response);
+               .body("message", is("The product has been added to your \u003ca href=\"/cart\"\u003eshopping cart\u003c/a\u003e"));
+
+//    assertThat(response.extract().path("updatetopcartsectionhtml").toString())
+//            .body("updatetopcartsectionhtml", is("(26)"));
     }
 }

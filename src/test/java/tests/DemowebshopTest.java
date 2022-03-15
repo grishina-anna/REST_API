@@ -21,7 +21,7 @@ public class DemowebshopTest {
                 .then()
                 .log().all()
                 .statusCode(200)
-                .body("success", is(true))
+                .body("success", is("true"))
                 .body("message", is("The product has been added to your " +
                         "<a href=\"/cart\">shopping cart</a>"))
                 .body("updatetopcartsectionhtml", is("(1)"));
@@ -45,7 +45,7 @@ public class DemowebshopTest {
                         .then()
                         .log().all()
                         .statusCode(200)
-                        .body("success", is(true))
+                        .body("success", is("true"))
                         .body("message", is("The product has been added to your " +
                                 "<a href=\"/cart\">shopping cart</a>"));
 

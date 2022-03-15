@@ -9,28 +9,45 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class DemowebshopTest {
     @Test
-    void addToCartTest(){
+    void addToCartAsNewUserTest(){
+        given()
+                .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                .body("product_attribute_72_5_18=53" +
+                        "&product_attribute_72_6_19=54" +
+                        "&product_attribute_72_3_20=57" +
+                        "&addtocart_72.EnteredQuantity=1")
+                .when()
+                .post("http://demowebshop.tricentis.com/addproducttocart/details/72/1")
+                .then()
+                .log().all()
+                .statusCode(200)
+                .body("success", is(true))
+                .body("message", is("The product has been added to your " +
+                        "<a href=\"/cart\">shopping cart</a>"))
+                .body("updatetopcartsectionhtml", is("(1)"));
+    }
+
+
+    @Test
+    void addToCartWithCookieTest() {
         Integer cartSize = 0;
 
         ValidatableResponse response =
-       given()
-               .contentType("application/x-www-form-urlencoded; charset=UTF-8")
-               .cookie("Nop.customer=359c8211-0cf7-496c-b8a7-7256023dedec; " +
-                       "ARRAffinity=a1e87db3fa424e3b31370c78def315779c40ca259e77568bef2bb9544f63134e;" +
-                       " __utma=78382081.192859927.1647281695.1647281695.1647281695.1;" + " __utmc=78382081; __utmz=78382081.1647281695.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); " +
-                       "NopCommerce.RecentlyViewedProducts=RecentlyViewedProductIds=74&RecentlyViewedProductIds=72;" +
-                       " __utmt=1; __atuvc=4%7C11; __atuvs=622f878a022c1205003; __utmb=78382081.7.10.1647281695")
-               .body("product_attribute_74_5_26=81" +
-                       "&product_attribute_74_6_27=83" +
-                       "&product_attribute_74_3_28=86" +
-                       "&addtocart_74.EnteredQuantity=1")
-               .when()
-               .post("http://demowebshop.tricentis.com/addproducttocart/details/74/1")
-               .then()
-               .log().all()
-               .statusCode(200)
-               .body("success", is(true))
-               .body("message", is("The product has been added to your \u003ca href=\"/cart\"\u003eshopping cart\u003c/a\u003e"));
+                given()
+                        .contentType("application/x-www-form-urlencoded; charset=UTF-8")
+                        .cookie("Nop.customer=88f590c6-59e9-4a55-b243-7395b35f0ce2;")
+                        .body("product_attribute_72_5_18=53" +
+                                "&product_attribute_72_6_19=54" +
+                                "&product_attribute_72_3_20=57" +
+                                "&addtocart_72.EnteredQuantity=1")
+                        .when()
+                        .post("http://demowebshop.tricentis.com/addproducttocart/details/72/1")
+                        .then()
+                        .log().all()
+                        .statusCode(200)
+                        .body("success", is(true))
+                        .body("message", is("The product has been added to your " +
+                                "<a href=\"/cart\">shopping cart</a>"));
 
 //    assertThat(response.extract().path("updatetopcartsectionhtml").toString())
 //            .body("updatetopcartsectionhtml", is("(26)"));
